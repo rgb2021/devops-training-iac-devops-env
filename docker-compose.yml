@@ -1,7 +1,7 @@
 version: "3.7"
 
 networks:
-  scalian_training-net:
+  devops_training_net:
     driver: bridge
     ipam:
       driver: default
@@ -17,19 +17,37 @@ volumes:
   sonarqube-vol:
 
 services:
-  ## TO BUILD AND RUN APP LOCALLY
-  java_app:
-    image: adrianscalian/scalian_training_java-app:1.0-SNAPSHOT
-    container_name: java_app
+
+  dind:
+    image: docker:dind
+    privileged: true
+    restart: always
+    networks:
+      devops_training_net:
+        aliases: 
+          - docker
     ports:
-      - 8084:8080
+      - 2376:2376
+    tty: true
+    volumes:
+      - docker-graph-storage:/var/lib/docker
+      - jenkins-data:/var/jenkins_home
+      - jenkins-docker-certs:/certs/client
+      - $HOME:/home
+    environment:
+      - DOCKER_TLS_CERTDIR=/certs
 
   ## TO TEST JENKINS PIPELINE
+  ssh-agent:
+      image: jenkins/ssh-agent
+      
   jenkins:
-    build: .
+    build: 
+      context: ./jenkins/.
+      dockerfile: Dockerfile
     restart: on-failure
     networks:
-      - scalian_training-net
+      - devops_training_net
     hostname: jenkins
     ports:
       - 127.0.0.1:2345:2345
@@ -48,24 +66,7 @@ services:
       - DOCKER_TLS_VERIFY=1
       - SONARQUBE_HOST=http://172.16.235.10:9000
 
-  dind:
-    image: docker:dind
-    privileged: true
-    restart: always
-    networks:
-      scalian_training-net:
-        aliases: 
-          - docker
-    ports:
-      - 2376:2376
-    tty: true
-    volumes:
-      - docker-graph-storage:/var/lib/docker
-      - jenkins-data:/var/jenkins_home
-      - jenkins-docker-certs:/certs/client
-      - $HOME:/home
-    environment:
-      - DOCKER_TLS_CERTDIR=/certs
+ 
 
   
   artifactory:
@@ -75,7 +76,7 @@ services:
     volumes:
       - artifactory-data:/nexus-data
     networks:
-      scalian_training-net:
+      devops_training_net:
         ipv4_address: 172.16.235.4
         aliases: 
           - artifactory
@@ -96,7 +97,7 @@ services:
       - "9009:9000"
     hostname: sonarqube
     networks:
-      scalian_training-net:
+      devops_training_net:
         ipv4_address: 172.16.235.10
         aliases: 
           - sonarqube
@@ -110,6 +111,6 @@ services:
       - postgresql-vol:/var/lib/postgresql
     hostname: sonardb
     networks:
-      scalian_training-net:
+      devops_training_net:
         aliases: 
           - sonardb

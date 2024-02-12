@@ -1,22 +1,17 @@
 
-# Docker Registry, DockerHub
+# IAC-DEOPS Environment
 
-## Docker Login 
-```bash
-$ docker login
- username: contrerasadr
- password: ******
 
-$ cat ~/.docker/config.json 
-```
-## Tag
+## CI / CD Strategy with Jenkins and Docker
+
+
+
+### Configure Jekins modules to install in *jenkins/plugins.txt*
+
+### Install Jenkins in local environment.
+https://github.com/jenkinsci/docker/
 ```bash
-$ docker tag scalian_training/bash-example:0.0.1 contrerasadr/scalian_training-bash-example:0.0.1
-$ docker tag scalian_training/bash-example:0.0.1-alpine contrerasadr/scalian_training-bash-example:0.0.1-alpine
+docker-compose up -d jenkins --build --force-recreate
+
 ```
 
-## Push
-```bash
-$ docker push contrerasadr/scalian_training-bash-example:0.0.1
-$ docker push contrerasadr/scalian_training-bash-example:0.0.1-alpine
-```
