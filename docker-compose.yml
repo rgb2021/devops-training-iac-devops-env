@@ -9,6 +9,7 @@ networks:
         - subnet: 172.16.235.0/24
 
 volumes:
+  registry-data:
   jenkins-data:
   artifactory-data:
   jenkins-docker-certs:
@@ -17,6 +18,19 @@ volumes:
   sonarqube-vol:
 
 services:
+
+  registry:
+    image: registry:2
+    ports:
+    - "5000:5000"
+    networks:
+      devops_training_net:
+        aliases: 
+          - local-registry
+    environment:
+      REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: /data
+    volumes:
+      - registry-data:/data
 
   dind:
     image: docker:dind

@@ -7,6 +7,10 @@
 	"dockerFile": "Dockerfile",
 
 	"features": {
+		"ghcr.io/rio/features/k3d": {},
+		//"inercia.vscode-k3d": {},
+		"ghcr.io/devcontainers-contrib/features/kubectl-asdf": {},
+		"ghcr.io/nucleuscloud/devcontainer-features/helmfile": {},
 		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
 			"version": "latest",
 			"enableNonRootDocker": "true",
