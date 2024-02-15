@@ -19,6 +19,8 @@ volumes:
 
 services:
 
+  
+
   registry:
     image: registry:2
     ports:
@@ -81,7 +83,21 @@ services:
       - SONARQUBE_HOST=http://172.16.235.10:9000
 
  
-
+  github-runner:
+    build:
+      context: github-runner
+      args:
+        RUNNER_VERSION: '2.313.0'
+    depends_on:
+      - dind
+    networks:
+      - devops_training_net
+    environment:
+      REPO: contreras-adr/devops-training-python-project
+      TOKEN: A6CZQVW7GLTXGJNXXWOJTMLFZVIUO
+      DOCKER_HOST: tcp://docker:2376
+      DOCKER_CERT_PATH: /certs/client
+      DOCKER_TLS_VERIFY: 1
   
   artifactory:
     image: sonatype/nexus3
