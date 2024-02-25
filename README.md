@@ -14,14 +14,15 @@ https://github.com/jenkinsci/docker/
 docker-compose up -d jenkins --build --force-recreate
 
 ```
+![](img/composeUp.png)
+
 
 ### Create GitHub SSH Key for Jenkins
 ```bash
 ssh-keygen -C "contreras.adr@outlook.com" -f ~/.ssh/jenkins-github
 cat ~/.ssh/jenkins-github.
 ```
-
-
+![](img/keygen.png)
 
 ## Instalar cluster k3d
 ```bash
@@ -33,15 +34,19 @@ kubectl cluster-info
 
 kubectl get nodes
 ```
+![](img/k3d.png)
+
 
 ## Create environments
 ```bash
 kubectl create ns dev-environment
 kubectl create ns prod-environment
 ```
+![](img/createNs.png)
 
 ## Install postgresql
 ## Create environments
 ```bash
 kubectl apply -f postgresql/postgres-pvc.yaml
 ```
+![](img/kubectl.png)
